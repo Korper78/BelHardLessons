@@ -15,7 +15,7 @@ def task1():
     while ' ' not in string:
         string = input('Что-то пошло не так, попробуйте еще: ')
     choice = input('Пробелы в минусы, вариант 1 или 2 (1 / 2): ')
-    while choice not in ['1', '2']:
+    while choice not in ('1', '2'):
         choice = input('Пробелы в минусы, вариант 1 или 2 (1 / 2): ')
     # print(choice)
     if choice == '1':
@@ -55,17 +55,18 @@ def task3():
 
 # Задание 4
 def task4():
-    pos = 0
-    neg = 0
+    nums = []
     print('Введите три любых числа')
     for i in range(3):
-        number = input(f'Введите {i+1} число: ')
-        while not is_number(number):
-            number = input(f'Уточните {i+1} число: ')
-        if float(number) > 0:
-            pos += 1
-        elif float(number) < 0:
-            neg += 1
+        nums[i] = input(f'Введите {i+1} число: ')
+        while not is_number(nums[i]):
+            nums[i] = input(f'Уточните {i+1} число: ')
+        # if float(number) > 0:
+        #     pos += 1
+        # elif float(number) < 0:
+        #     neg += 1
+    pos = (float(nums[0]) > 0) + (float(nums[1]) > 0) + (float(nums[2]) > 0)
+    neg = (float(nums[0]) < 0) + (float(nums[1]) < 0) + (float(nums[2]) < 0)
     print('Положительных чисел: ', pos)
     print('Отрицательных чисел: ', neg)
     print('Нулей: ', 3-pos-neg)
