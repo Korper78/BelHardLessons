@@ -27,7 +27,16 @@ sql_db.execute("create table if not exists product (id int primary key, name tex
 db_cur = sql_db.cursor()
 for indx in range(2):
     db_cur.execute("replace into category (id, name, parent, descr) values(?,?,?,?)", (categories.ID[indx], categories.Name[indx], categories.Parent[indx], categories.Descr[indx]))
+db_cur.execute("select * from category where id=?", (1,))
+print(db_cur.fetchall())
+db_cur.execute("select * from category where name=?", ('Cat2',))
+print(db_cur.fetchall())
 for indx in range(4):
     db_cur.execute("replace into product (id, name, descr, category) values(?,?,?,?)", (products.ID[indx], products.Name[indx], products.Descr[indx], products.Category[indx]))
+db_cur.execute("select * from product where id=?", (3,))
+print(db_cur.fetchall())
+db_cur.execute("select * from product where category=?", (1,))
+print(db_cur.fetchall())
+
 sql_db.commit()
 sql_db.close()
