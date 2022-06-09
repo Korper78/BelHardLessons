@@ -1,0 +1,13 @@
+create database homework_db;
+create table users(id bigserial primary key, email varchar(255), password varchar(64), name varchar(255) not null, time_registration timestamp default now());
+CREATE TABLE roles(id BIGSERIAL PRIMARY KEY, role VARCHAR(255) UNIQUE NOT NULL);
+CREATE TABLE tags(id BIGSERIAL PRIMARY KEY, name VARCHAR(50) NOT NULL);
+CREATE TABLE dialogs(id BIGSERIAL PRIMARY KEY, name VARCHAR(255) NOT NULL, time_creation TIMESTAMP DEFAULT NOW());
+CREATE TABLE users_to_roles(user_id BIGINT NOT NULL REFERENCES users(id), role_id BIGINT NOT NULL REFERENCES roles(id));
+CREATE TABLE friends(user1_id BIGINT REFERENCES users(id), user2_id BIGINT REFERENCES users(id), time_creation TIMESTAMP DEFAULT NOW());
+CREATE TABLE users_to_dialogs(user_id BIGINT REFERENCES users(id), dialog_id BIGINT REFERENCES dialogs(id), time_creation TIMESTAMP DEFAULT NOW());
+CREATE TABLE albums(id BIGSERIAL PRIMARY KEY, name VARCHAR(255) NOT NULL, user_id BIGINT REFERENCES users(id), time_creation TIMESTAMP DEFAULT NOW());
+CREATE TABLE photos(id BIGSERIAL PRIMARY KEY, path VARCHAR(255) NOT NULL, description VARCHAR(255), album_id BIGINT REFERENCES albums(id), time_creation TIMESTAMP DEFAULT NOW());
+CREATE TABLE tags_to_photos(photo_id BIGINT NOT NULL REFERENCES photos(id), tag_id BIGINT NOT NULL REFERENCES tags(id));
+CREATE TABLE messages(id BIGSERIAL PRIMARY KEY, dialog_id BIGINT REFERENCES dialogs(id), user_id BIGINT REFERENCES users(id), text TEXT, time_creation TIMESTAMP DEFAULT NOW(), text_changed BOOLEAN DEFAULT FALSE);
+CREATE TABLE messages_to_photos(photo_id BIGINT NOT NULL REFERENCES photos(id), message_id BIGINT NOT NULL REFERENCES messages(id));
