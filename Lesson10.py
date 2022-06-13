@@ -60,6 +60,7 @@ def decode_bits(bits):
     }
     bit_list = []
     i1, i0 = 0, 0
+    bits.strip('0')
     for char in bits:
         match char:
             case '1':
@@ -93,4 +94,107 @@ def decode_bits(bits):
     return morse.strip()
 
 
-print(decode_bits("000000011100000"))
+print(decode_bits("0000001011100000"))
+
+
+from collections import Counter
+from itertools import groupby, product
+def mix(s1, s2):
+    str1 = Counter([char for char in s1 if char.isalpha() and char.islower() and (s1.count(char) > 1)])
+    str2 = Counter([char for char in s2 if char.isalpha() and char.islower() and (s2.count(char) > 1)])
+    str3 = str2 | str1
+    res_str = sorted([f'{"=" if str1[k] == str2[k] else "1" if str1[k] > str2[k] else "2"}:' + ''.join(list(g)) for k, g in groupby(sorted(str3.elements()))], key=lambda x: x[0])
+    return '/'.join(sorted(res_str, key=lambda x: len(x), reverse=True))
+
+print(mix("mmmmm m nnnnn y&friend&Paul has heavy hats! &", "my frie n d Joh n has ma n y ma n y frie n ds n&"))
+
+
+def get_pins(observed: str) -> list[str]:
+    keypad2 = ('08', '124', '2153', '326', '4157', '52684', '6359', '748', '85907', '968')
+    return [''.join(combo) for combo in product(*[keypad2[int(char)] for char in observed])]
+
+print(sorted(get_pins('8')))
+
+
+from math import gcd
+
+def solution(a: list[int]) -> int:
+    # a.sort()
+    # if len(set(a)) > 1:
+    #     a[a.index(max(a))] -= a[a.index(min(a))]
+    #     return solution(a)
+    # else:
+    #     return sum(a)
+
+    # return sum(a) if a == a[::-1] else solution(a)
+
+    # set_a = set(a)
+    # while len(set_a) > 1:
+    # while len(set(a)) > 1:
+        # a.append(max(a) - min(a))
+        # a.remove(max(a))
+        # while not all(a[0] == aa for aa in a):
+        # a.sort()
+        # a[a.index(max(a))] -= a[a.index(min(a))]
+        # a.insert(-2, a.pop(-1) - a[-1])
+
+        # a.append(a.pop(a.index(max(a))) - max(a))
+
+        # a.sort()
+        # a = list(accumulate(a, lambda x, y: y if x == y else y - x))
+
+        # a = list(map(lambda x, y: abs(x-y) if x-y else x, a, a[-1:]+a[:-1]))
+
+        # a.append(max(a) - a.remove(max(a))[0])
+        # m = max(set_a)
+        # set_a.remove(m)
+        # set_a.add(max(set_a) - min(set_a))
+        # set_a.remove(max(set_a))
+    # return len(a) * max(set_a)
+    return len(a) * gcd(*a)
+
+print(solution([1, 21, 55]))
+
+def sum_for_list(lst: list[int]) -> list[list[int]]:
+    """
+    Поиск простых делителей и вычисление сумм элементов списка, кратных имю
+    :param lst: входящий список положительных и отрицательных целых
+    :return: вложенный список простых делителей и сумм
+    """
+    # p = 2
+    # # norm_lst = sorted([abs(x) for x in lst])
+    # res_lst = []
+    # while p <= max([abs(x) for x in lst]) // 2 + 1:
+    #     for pp in range(2, int(p ** 0.5 + 1)):
+    #         if p % pp == 0:
+    #             break
+    #     else:
+    #         # comp_list = [x for x in lst if not (x % p)]
+    #         if comp_lst := [x for x in lst if not (x % p)]:
+    #             # res_lst.append([p, sum(comp_lst)])
+    #             res_lst.append([p, comp_lst])
+    #     p += 1 if p == 2 else 2
+    # res_lst += [[abs(p), [p]] for p in set(lst) - {y for x in res_lst for y in x[1]}]
+    # # for x in res_lst:
+    # #     print(f'{x[0]} : {x[1]}')
+    # return [[x[0], sum(x[1])] for x in res_lst]
+
+    """
+    Вариант 2. В множестве накапливаем уникальные простые делители всех элементов списка,
+    включая элементы - простые числа
+    """
+    set_lst = set()
+    for el in lst:
+        p = 2
+        while p * p <= abs(el):
+            if el % p:
+                p += 1 if p == 2 else 2
+            else:
+                el //= p
+                set_lst.add(p)
+        if abs(el) > 1:
+            set_lst.add(abs(el))
+    print(set_lst, lst)
+    return sorted([[p, sum([x for x in lst if not (x % p)])] for p in set_lst], key=lambda x: x[0])
+
+print(sum_for_list([15, 30, -127, 51]))
