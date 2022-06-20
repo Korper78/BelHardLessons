@@ -1,7 +1,7 @@
 import asyncio
 
-from api_engine import create_session
-from jsnmodels import GetResponse, PostRequest
+from FinalHW.utils.url_api.api_engine import create_session
+from FinalHW.utils.url_api.jsnmodels import GetResponse, PostRequest
 from aiohttp import ClientSession
 # from asyncio import run
 
@@ -24,7 +24,7 @@ class FastAPI(object):
     @create_session(HOST)
     async def fastapi_post(req: PostRequest,session: ClientSession = None) -> None:
         # response = await session.get(url=f'{OnlinerAPI.HOST}/sdapi/catalog.api/search/{category}')
-        await session.post(url='', data=req)
+        await session.post(url='/add', data=dict(req))
         # if response.status == 200:
         #     # return OnlinerResponse(response.json())
         #     return await response.json()

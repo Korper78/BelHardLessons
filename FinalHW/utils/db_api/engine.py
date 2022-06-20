@@ -15,6 +15,6 @@ engine = create_async_engine(f'postgresql+asyncpg://{DATABASE_URL}')
 
 def create_session(func):
     async def wrapper(**kwargs):
-        async with AsyncSession(bind=engine, autocommit=True) as session:
+        async with AsyncSession(bind=engine) as session:
             return func(**kwargs, session=session)
     return wrapper
